@@ -1,0 +1,5 @@
+Hi <%= @challenger.name.presence || "there" %>,
+
+<%= @opponent.name.presence || @opponent.email %> declined your challenge in <%= @league.name %>.
+
+Challenge someone else: <%= league_url(@league) %>

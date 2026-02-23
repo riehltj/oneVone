@@ -1,0 +1,22 @@
+<%= form_with model: availability, local: true do |f| %>
+  <%= render "devise/shared/error_messages", resource: availability %>
+  <div class="space-y-4">
+    <div>
+      <%= f.label :day_of_week, class: "block text-sm font-medium text-slate-700 mb-1" %>
+      <%= f.select :day_of_week, Availability::DAYS, { include_blank: "Select day" }, class: "w-full rounded-xl border border-slate-300 px-4 py-3 text-base focus:border-green-500 focus:ring-2 focus:ring-green-500/20 min-h-[48px]" %>
+    </div>
+    <div>
+      <%= f.label :start_time, class: "block text-sm font-medium text-slate-700 mb-1" %>
+      <%= f.time_field :start_time, class: "w-full rounded-xl border border-slate-300 px-4 py-3 text-base focus:border-green-500 focus:ring-2 focus:ring-green-500/20 min-h-[48px]" %>
+    </div>
+    <div>
+      <%= f.label :end_time, class: "block text-sm font-medium text-slate-700 mb-1" %>
+      <%= f.time_field :end_time, class: "w-full rounded-xl border border-slate-300 px-4 py-3 text-base focus:border-green-500 focus:ring-2 focus:ring-green-500/20 min-h-[48px]" %>
+    </div>
+    <div>
+      <%= f.label :timezone, "Timezone (optional)", class: "block text-sm font-medium text-slate-700 mb-1" %>
+      <%= f.text_field :timezone, value: availability.timezone.presence || "America/Denver", class: "w-full rounded-xl border border-slate-300 px-4 py-3 text-base focus:border-green-500 focus:ring-2 focus:ring-green-500/20 min-h-[48px]" %>
+    </div>
+    <%= f.submit class: "w-full rounded-xl bg-green-500 hover:bg-green-600 text-white font-semibold py-3.5 min-h-[48px] transition-colors" %>
+  </div>
+<% end %>

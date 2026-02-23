@@ -1,0 +1,28 @@
+<div class="text-center sm:text-left">
+  <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-3">
+    Denver Pickleball.<br class="sm:hidden" />
+    <span class="text-green-600">One v one.</span>
+  </h1>
+  <p class="text-slate-600 text-lg sm:text-xl max-w-xl mb-8">
+    Join a rating pool, set your zone and availability, challenge players, and track matches and standings.
+  </p>
+  <%= link_to leagues_path, class: "inline-flex items-center justify-center w-full sm:w-auto rounded-2xl bg-green-500 hover:bg-green-600 text-white font-semibold text-lg px-8 py-4 min-h-[52px] shadow-lg shadow-green-500/25 transition-all active:scale-[0.98]" do %>
+    Browse Denver pools
+  <% end %>
+</div>
+
+<%# Optional: visual cue for mobile-first %>
+<div class="mt-12 sm:mt-16 grid grid-cols-3 gap-3 max-w-sm mx-auto sm:mx-0 sm:max-w-none">
+  <div class="rounded-2xl bg-white border border-slate-200 p-4 text-center shadow-sm">
+    <span class="text-2xl font-bold text-green-600">1</span>
+    <p class="text-xs sm:text-sm text-slate-600 mt-1">Join a pool</p>
+  </div>
+  <div class="rounded-2xl bg-white border border-slate-200 p-4 text-center shadow-sm">
+    <span class="text-2xl font-bold text-green-600">2</span>
+    <p class="text-xs sm:text-sm text-slate-600 mt-1">Set availability</p>
+  </div>
+  <div class="rounded-2xl bg-white border border-slate-200 p-4 text-center shadow-sm">
+    <span class="text-2xl font-bold text-green-600">3</span>
+    <p class="text-xs sm:text-sm text-slate-600 mt-1">Challenge & play</p>
+  </div>
+</div>

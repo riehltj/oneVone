@@ -1,0 +1,17 @@
+one:
+  user: one
+  league: one
+  dupr_rating: 4.2
+  status: active
+
+two:
+  user: two
+  league: one
+  dupr_rating: 4.3
+  status: active
+
+three:
+  user: three
+  league: two
+  dupr_rating: 4.5
+  status: active

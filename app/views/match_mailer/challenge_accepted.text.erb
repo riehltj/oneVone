@@ -1,0 +1,12 @@
+Hi <%= @challenger.name.presence || "there" %>,
+
+<%= @opponent.name.presence || @opponent.email %> accepted your challenge in <%= @league.name %>.
+
+<% if @match.scheduled_at.present? || @match.location.present? %>
+Match details:
+<% if @match.scheduled_at.present? %>  Time: <%= l(@match.scheduled_at, format: :long) %>
+<% end %><% if @match.location.present? %>  Location: <%= @match.location %>
+<% end %>
+<% end %>
+
+Go to your dashboard to report the result after you play: <%= dashboard_url %>

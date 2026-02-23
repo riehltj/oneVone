@@ -1,0 +1,17 @@
+one:
+  name: Denver 4.0–4.5
+  city: Denver
+  region: Denver Metro
+  rating_min: 4.0
+  rating_max: 4.5
+  prize_description: T-shirt for top finisher
+  monthly_price_cents: 1999
+
+two:
+  name: Denver 4.5
+  city: Denver
+  region: Denver Metro
+  rating_min: 4.5
+  rating_max: 4.5
+  prize_description: T-shirt for top finisher
+  monthly_price_cents: 1999

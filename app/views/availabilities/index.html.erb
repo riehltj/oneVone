@@ -1,0 +1,24 @@
+<h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">My availability</h1>
+<p class="text-slate-600 mb-6">When you’re free to play. Other pool members see this when arranging matches.</p>
+
+<%= link_to "Add availability", new_availability_path, class: "inline-flex items-center justify-center rounded-xl bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-3 min-h-[48px] mb-6" %>
+
+<% if @availabilities.any? %>
+  <ul class="space-y-3">
+    <% @availabilities.each do |a| %>
+      <li class="rounded-2xl bg-white border border-slate-200 shadow-sm p-4 flex flex-wrap items-center gap-3">
+        <span class="font-medium text-slate-900"><%= a.day_of_week %> <%= a.start_time&.strftime("%l:%M %p") %> – <%= a.end_time&.strftime("%l:%M %p") %></span>
+        <div class="flex gap-2 ml-auto">
+          <%= link_to "Edit", edit_availability_path(a), class: "rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-3 py-2 text-sm min-h-[44px]" %>
+          <%= button_to "Remove", availability_path(a), method: :delete, data: { turbo_confirm: "Remove this slot?" }, class: "rounded-lg bg-red-50 hover:bg-red-100 text-red-700 font-medium px-3 py-2 text-sm min-h-[44px]" %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="rounded-2xl bg-slate-50 border border-slate-200 p-6 text-slate-500 text-center">No availability set. Add when you’re free to play.</p>
+<% end %>
+
+<p class="mt-8">
+  <%= link_to "Dashboard", dashboard_path, class: "text-green-600 hover:text-green-700 font-medium" %>
+</p>

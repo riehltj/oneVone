@@ -1,0 +1,11 @@
+one:
+  user: one
+  league: one
+  stripe_subscription_id: sub_test_1
+  status: active
+
+two:
+  user: two
+  league: one
+  stripe_subscription_id: sub_test_2
+  status: active

@@ -1,0 +1,20 @@
+one:
+  user: one
+  day_of_week: Tuesday
+  start_time: "17:30"
+  end_time: "22:00"
+  timezone: America/Denver
+
+two:
+  user: one
+  day_of_week: Thursday
+  start_time: "17:30"
+  end_time: "22:00"
+  timezone: America/Denver
+
+three:
+  user: two
+  day_of_week: Saturday
+  start_time: "10:00"
+  end_time: "14:00"
+  timezone: America/Denver

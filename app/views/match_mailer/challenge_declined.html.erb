@@ -1,0 +1,5 @@
+<p>Hi <%= @challenger.name.presence || "there" %>,</p>
+
+<p><%= @opponent.name.presence || @opponent.email %> declined your challenge in <strong><%= @league.name %></strong>.</p>
+
+<p>You can <%= link_to "challenge someone else in this pool", league_url(@league) %>.</p>

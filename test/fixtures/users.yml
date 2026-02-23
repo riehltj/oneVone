@@ -1,0 +1,20 @@
+one:
+  email: one@example.com
+  name: Alice One
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+  zone: North Denver
+  can_host: true
+
+two:
+  email: two@example.com
+  name: Bob Two
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+  zone: South Denver
+  can_host: false
+
+three:
+  email: three@example.com
+  name: Carol Three
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+  zone: East Denver
+  can_host: true

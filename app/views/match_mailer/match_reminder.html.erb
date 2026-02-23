@@ -1,0 +1,8 @@
+<p>Hi <%= @recipient.name.presence || "there" %>,</p>
+
+<p>Reminder: you have a match in <strong><%= @league.name %></strong> with <%= @other.name.presence || @other.email %>.</p>
+
+<p><strong>When:</strong> <%= l(@match.scheduled_at, format: :long) %><br>
+<strong>Where:</strong> <%= @match.location.presence || "Location TBD" %></p>
+
+<p><%= link_to "Dashboard", dashboard_url %> – report the result after you play.</p>

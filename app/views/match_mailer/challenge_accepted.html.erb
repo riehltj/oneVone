@@ -1,0 +1,17 @@
+<p>Hi <%= @challenger.name.presence || "there" %>,</p>
+
+<p><%= @opponent.name.presence || @opponent.email %> accepted your challenge in <strong><%= @league.name %></strong>.</p>
+
+<% if @match.scheduled_at.present? || @match.location.present? %>
+  <p><strong>Match details:</strong></p>
+  <ul>
+    <% if @match.scheduled_at.present? %>
+      <li>Time: <%= l(@match.scheduled_at, format: :long) %></li>
+    <% end %>
+    <% if @match.location.present? %>
+      <li>Location: <%= @match.location %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<p><%= link_to "Go to dashboard", dashboard_url %> to report the result after you play.</p>

@@ -1,0 +1,19 @@
+one:
+  league: one
+  challenger: one
+  opponent: two
+  status: pending
+
+two:
+  league: one
+  challenger: two
+  opponent: one
+  status: accepted
+
+three:
+  league: one
+  challenger: one
+  opponent: two
+  status: completed
+  winner: one
+  score: "11-9, 11-7"

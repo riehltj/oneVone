@@ -1,0 +1,113 @@
+<h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-6">Dashboard</h1>
+
+<div class="space-y-5 sm:space-y-6">
+  <section class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+    <h2 class="px-4 sm:px-5 py-3 font-semibold text-slate-900 border-b border-slate-100">My pools</h2>
+    <div class="p-4 sm:p-5">
+      <% if current_user.league_memberships.any? %>
+        <ul class="space-y-2">
+          <% current_user.league_memberships.includes(:league).each do |m| %>
+            <li>
+              <%= link_to league_path(m.league), class: "block rounded-xl border border-slate-200 p-3 hover:border-green-200 hover:bg-green-50/30 transition-colors" do %>
+                <span class="font-medium text-slate-900"><%= m.league.name %></span>
+                <span class="text-slate-500 text-sm"> · DUPR <%= m.dupr_rating %></span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-slate-600 mb-3">You haven’t joined any pools yet.</p>
+        <%= link_to "Browse Denver pools", leagues_path, class: "inline-flex items-center justify-center rounded-xl bg-green-500 hover:bg-green-600 text-white font-medium px-4 py-2.5 min-h-[44px]" %>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+    <h2 class="px-4 sm:px-5 py-3 font-semibold text-slate-900 border-b border-slate-100">Availability</h2>
+    <div class="p-4 sm:p-5">
+      <p class="text-slate-600 text-sm mb-3">When you’re free to play. Other players see this when arranging matches.</p>
+      <%= link_to "Manage availability", availabilities_path, class: "inline-flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium px-4 py-2.5 min-h-[44px] transition-colors" %>
+      <% if current_user.availabilities.any? %>
+        <ul class="mt-4 space-y-1.5 text-sm text-slate-600">
+          <% current_user.availabilities.order(:day_of_week, :start_time).each do |a| %>
+            <li><%= a.day_of_week %> <%= a.start_time&.strftime("%l:%M") %> – <%= a.end_time&.strftime("%l:%M") %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+    <h2 class="px-4 sm:px-5 py-3 font-semibold text-slate-900 border-b border-slate-100">Pending challenges</h2>
+    <div class="p-4 sm:p-5">
+      <% pending = current_user.challenges_received.pending %>
+      <% if pending.any? %>
+        <ul class="space-y-3">
+          <% pending.includes(:challenger, :league).each do |match| %>
+            <li class="rounded-xl border border-slate-200 p-4">
+              <p class="text-slate-900 font-medium mb-1"><%= match.challenger.name.presence || match.challenger.email %> challenged you in <%= match.league.name %></p>
+              <% if match.scheduled_at.present? || match.location.present? %>
+                <p class="text-sm text-slate-600 mb-3">
+                  <%= match.scheduled_at.present? ? l(match.scheduled_at, format: :long) : "" %>
+                  <%= " · " if match.scheduled_at.present? && match.location.present? %>
+                  <%= match.location.presence || "" %>
+                </p>
+              <% end %>
+              <div class="flex flex-wrap gap-2">
+                <%= button_to "Accept", match_path(match), params: { match: { status: "accepted" } }, method: :patch, class: "rounded-xl bg-green-500 hover:bg-green-600 text-white font-medium px-4 py-2.5 text-sm min-h-[44px]" %>
+                <%= button_to "Decline", match_path(match), params: { match: { status: "declined" } }, method: :patch, class: "rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-4 py-2.5 text-sm min-h-[44px]" %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-slate-500 text-sm">No pending challenges.</p>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+    <h2 class="px-4 sm:px-5 py-3 font-semibold text-slate-900 border-b border-slate-100">Report result</h2>
+    <div class="p-4 sm:p-5">
+      <% accepted = Match.where(status: "accepted").where("challenger_id = ? OR opponent_id = ?", current_user.id, current_user.id).includes(:challenger, :opponent, :league) %>
+      <% if accepted.any? %>
+        <ul class="space-y-4">
+          <% accepted.each do |match| %>
+            <li class="rounded-xl border border-slate-200 p-4">
+              <p class="font-medium text-slate-900 mb-1"><%= match.challenger.name.presence || match.challenger.email %> vs <%= match.opponent.name.presence || match.opponent.email %> · <%= match.league.name %></p>
+              <% if match.scheduled_at.present? || match.location.present? %>
+                <p class="text-sm text-slate-600 mb-3"><%= match.scheduled_at.present? ? l(match.scheduled_at, format: :long) : "" %><%= " · " if match.scheduled_at.present? && match.location.present? %><%= match.location.presence || "" %></p>
+              <% end %>
+              <%= form_with model: match, url: match_path(match), method: :patch, local: true, class: "flex flex-wrap items-end gap-3" do |f| %>
+                <%= f.hidden_field :status, value: "completed" %>
+                <div class="min-w-[120px]">
+                  <%= f.label :winner_id, "Winner", class: "block text-xs font-medium text-slate-500 mb-1" %>
+                  <%= f.select :winner_id, [[match.challenger.name.presence || match.challenger.email, match.challenger_id], [match.opponent.name.presence || match.opponent.email, match.opponent_id]], {}, class: "w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm focus:border-green-500 focus:ring-2 focus:ring-green-500/20 min-h-[44px]" %>
+                </div>
+                <div class="min-w-[100px]">
+                  <%= f.label :score, "Score (optional)", class: "block text-xs font-medium text-slate-500 mb-1" %>
+                  <%= f.text_field :score, placeholder: "11-9, 11-7", class: "w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm focus:border-green-500 min-h-[44px]" %>
+                </div>
+                <%= f.submit "Submit result", class: "rounded-xl bg-green-500 hover:bg-green-600 text-white font-medium px-4 py-2.5 text-sm min-h-[44px]" %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-slate-500 text-sm">No accepted matches to report.</p>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+    <h2 class="px-4 sm:px-5 py-3 font-semibold text-slate-900 border-b border-slate-100">Profile</h2>
+    <div class="p-4 sm:p-5">
+      <p class="text-slate-600 text-sm mb-3">Zone: <strong><%= current_user.zone.presence || "Not set" %></strong> · Can host: <strong><%= current_user.can_host? ? "Yes" : "No" %></strong></p>
+      <%= link_to "Edit profile", edit_user_registration_path, class: "inline-flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium px-4 py-2.5 min-h-[44px]" %>
+    </div>
+  </section>
+</div>
+
+<p class="mt-6">
+  <%= link_to "Home", root_path, class: "text-green-600 hover:text-green-700 font-medium" %>
+</p>
