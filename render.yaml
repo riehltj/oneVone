@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: one-vone
+    runtime: ruby
+    plan: starter
+    buildCommand: "./bin/render-build.sh"
+    preDeployCommand: "bundle exec rails db:migrate"
+    startCommand: "bundle exec rails server -b 0.0.0.0"
+    healthCheckPath: /up
+    disk:
+      name: one-vone-storage
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_LOG_TO_STDOUT
+        value: "true"
+      # Copy the contents of config/master.key and set this in the Render dashboard
+      - key: RAILS_MASTER_KEY
+        sync: false
+      # Your Render subdomain or custom domain, e.g. one-vone.onrender.com
+      - key: APP_HOST
+        sync: false
+      # From address for all emails, e.g. noreply@yourdomain.com
+      - key: MAILER_FROM
+        sync: false
+      # Runs Solid Queue inside Puma (no separate worker process needed)
+      - key: SOLID_QUEUE_IN_PUMA
+        value: "true"
+      # SQLite files on the persistent disk
+      - key: SQLITE_DB_PATH
+        value: /var/data/production.sqlite3
+      - key: SQLITE_CACHE_DB_PATH
+        value: /var/data/production_cache.sqlite3
+      - key: SQLITE_QUEUE_DB_PATH
+        value: /var/data/production_queue.sqlite3
+      - key: SQLITE_CABLE_DB_PATH
+        value: /var/data/production_cable.sqlite3
+      # Stripe (optional — app works without these, payments just won't process)
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
